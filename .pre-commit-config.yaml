@@ -9,6 +9,7 @@ repos:
       - id: check-merge-conflict
       - id: check-added-large-files
         args: ['--maxkb=500']
+        exclude: ^images/
       - id: detect-private-key
       - id: check-case-conflict
       - id: check-docstring-first

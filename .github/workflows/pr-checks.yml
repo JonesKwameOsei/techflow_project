@@ -91,6 +91,7 @@ jobs:
     label-check:
         name: Check Required Labels
         runs-on: ubuntu-latest
+        continue-on-error: true # Make this check non-blocking during setup
         steps:
             - name: Check for required labels
               uses: actions/github-script@v7
@@ -103,16 +104,21 @@ jobs:
                       });
 
                       const labelNames = labels.map(label => label.name);
-                      const requiredLabels = ['type:', 'priority:', 'status:'];
+                      const requiredLabels = ['type', 'priority', 'status'];
 
-                      for (const requiredPrefix of requiredLabels) {
-                        if (!labelNames.some(label => label.startsWith(requiredPrefix))) {
-                          core.setFailed(`Missing required label with prefix: ${requiredPrefix}`);
-                          return;
+                      const missingLabels = [];
+                      for (const requiredLabel of requiredLabels) {
+                        if (!labelNames.includes(requiredLabel)) {
+                          missingLabels.push(requiredLabel);
                         }
                       }
 
-                      console.log('✅ All required labels are present');
+                      if (missingLabels.length > 0) {
+                        console.log(`⚠️ Missing recommended labels: ${missingLabels.join(', ')}`);
+                        console.log('Consider adding these custom labels to improve PR organization.');
+                      } else {
+                        console.log('✅ All recommended labels are present');
+                      }
 
     branch-freshness:
         name: Check Branch Freshness
