@@ -252,7 +252,7 @@ All checks have passed successfully. The code is now ready to be pushed to the r
 
 ![alt text](images/pre-commit-pass.png)
 
-**Branch protection** working as expected. Now:
+**Branch protection** is working as expected. Now:
 
 ![alt text](images/branch-protection.png)
 
