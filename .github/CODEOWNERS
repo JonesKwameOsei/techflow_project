@@ -1,25 +1,25 @@
 # Global reviewers - require approval for all changes
 
-* @JonesKwames
+* @JonesKwameOsei @yormengh @Dcoder21
 
 ## GitHub workflows and CI/CD configurations
 
-/.github/ @JonesKwames
-/.pre-commit-config.yaml @JonesKwames
-/CI-CD-SETUP.md @JonesKwames
+/.github/ @JonesKwameOsei @yormengh @Dcoder21
+/.pre-commit-config.yaml @JonesKwameOsei @yormengh @Dcoder21
+/CI-CD-SETUP.md @JonesKwameOsei @yormengh @Dcoder21
 
 ## Python application code
 
-*.py @JonesKwames
-/requirements.txt @JonesKwames
-/test_*.py @JonesKwames
+*.py @JonesKwameOsei @yormengh @Dcoder21
+/requirements.txt @JonesKwameOsei @yormengh @Dcoder21
+/test_*.py @JonesKwameOsei @yormengh @Dcoder21
 
 ## Documentation
 
-*.md @JonesKwames
+*.md @JonesKwameOsei @yormengh @Dcoder21
 
 ## Configuration files
 
-*.yml @JonesKwames
-*.yaml @JonesKwames
-*.json @JonesKwames
+*.yml @JonesKwameOsei @yormengh @Dcoder21
+*.yaml @JonesKwameOsei @yormengh @Dcoder21
+*.json @JonesKwameOsei @yormengh @Dcoder21
