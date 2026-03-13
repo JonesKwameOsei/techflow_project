@@ -78,7 +78,7 @@ Go to your repository on GitHub:
 - ✅ **Require deployments to succeed** - If you have deployment environments
 - ✅ **Lock branch** - For extra protection (makes branch read-only)
 
-> **⚠️ Important**: The required status checks will only appear in the dropdown **after** the code is pushed and the GitHub Actions workflows have run at least once. If the status checks listed, push the changes first, then return to configure the ruleset.
+> **⚠️ Important**: The required status checks will only appear in the dropdown **after** the code is pushed and the GitHub Actions workflows have run at least once. If you don't see the status checks listed, push your changes first, then return to configure the ruleset.
 
 1. Click **Create** to save the ruleset
 
