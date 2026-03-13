@@ -1,6 +1,6 @@
 # TechFlow CI/CD Project 🚀
 
-[![CI/CD Pipeline](https://github.com/Dcoder21/Techflow-Project/actions/workflows/pipeline.yml/badge.svg)](https://github.com/Dcoder21/Techflow-Project/actions/workflows/pipeline.yml)
+[![CI/CD Pipeline](https://github.com/JonesKwameOsei/Techflow-Project/actions/workflows/pipeline.yml/badge.svg)](https://github.com/JonesKwameOsei/Techflow-Project/actions/workflows/pipeline.yml)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen)](https://github.com/pre-commit/pre-commit)
 [![Ruff](https://img.shields.io/badge/code%20style-ruff-000000)](https://github.com/astral-sh/ruff)
 [![Python](https://img.shields.io/badge/python-3.11+-blue)](https://python.org)
@@ -255,7 +255,6 @@ All checks have passed successfully. The code is now ready to be pushed to the r
 **Branch protection** is working as expected. Now:
 
 ![alt text](images/branch-protection.png)
-
 
 - Changes must be made through a `pull request` - Direct pushes to `main` are blocked.
 - `4 of 4 checks` must pass before merging - All GitHub Actions checks must succeed.
