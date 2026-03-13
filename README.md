@@ -262,4 +262,11 @@ All checks have passed successfully. The code is now ready to be pushed to the r
 - `1 approving review` is required - At least one code owner must approve the PR.
 - `Commits must have verified signatures` - Needs signed commits to ensure authenticity.
 
+### Pull Request Code QualityChecks
+
+- All pre-commit hooks run automatically on the PR branch.
+- For any hook that failed, the PR showed the failed checks and cannot be merged until all issues
+
+![alt text](images/pr.png)
+
 ---
