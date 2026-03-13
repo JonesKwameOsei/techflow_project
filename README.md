@@ -252,4 +252,14 @@ All checks have passed successfully. The code is now ready to be pushed to the r
 
 ![alt text](images/pre-commit-pass.png)
 
+**Branch protection** working as expected. Now:
+
+![alt text](images/branch-protection.png)
+
+
+- Changes must be made through a `pull request` - Direct pushes to `main` are blocked.
+- `4 of 4 checks` must pass before merging - All GitHub Actions checks must succeed.
+- `1 approving review` is required - At least one code owner must approve the PR.
+- `Commits must have verified signatures` - Needs signed commits to ensure authenticity.
+
 ---
