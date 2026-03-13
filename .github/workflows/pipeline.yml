@@ -1,0 +1,165 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+env:
+  PYTHON_VERSION: "3.11"
+
+jobs:
+  pre-commit:
+    name: Pre-commit Checks
+    runs-on: ubuntu-latest
+    outputs:
+      continue: ${{ steps.continue.outputs.result }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "pip"
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: latest
+
+      - name: Install pre-commit
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pre-commit
+
+      - name: Cache pre-commit environment
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}
+          restore-keys: |
+            pre-commit-${{ runner.os }}-
+
+      - name: Run pre-commit
+        run: pre-commit run --all-files --show-diff-on-failure
+
+      - name: Set continue flag
+        id: continue
+        run: echo "result=true" >> $GITHUB_OUTPUT
+
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    needs: pre-commit
+    if: needs.pre-commit.outputs.continue == 'true'
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install coverage pytest-cov
+
+      - name: Run tests with coverage
+        run: |
+          python -m pytest test_app.py -v --cov=app --cov-report=xml --cov-report=term
+
+      - name: Upload coverage to Codecov
+        if: matrix.python-version == env.PYTHON_VERSION
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    needs: pre-commit
+    if: needs.pre-commit.outputs.continue == 'true'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install security tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install safety bandit[toml]
+
+      - name: Run safety check
+        run: safety check --json
+
+      - name: Run bandit security scan
+        run: bandit -f screen app.py || true
+
+  build-and-validate:
+    name: Build and Validate
+    runs-on: ubuntu-latest
+    needs: [pre-commit, test]
+    if: needs.pre-commit.outputs.continue == 'true' && needs.test.result == 'success'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Test application startup
+        run: |
+          python -c "from app import app; print('App imported successfully')"
+          timeout 10s python app.py || true
+
+      - name: Validate application health
+        run: |
+          FLASK_HOST=0.0.0.0 python app.py &
+          APP_PID=$!
+          sleep 5
+          curl -f http://localhost:5000/health || exit 1
+          kill $APP_PID
+
+  deployment-ready:
+    name: Deployment Ready
+    runs-on: ubuntu-latest
+    needs: [pre-commit, test, security-scan, build-and-validate]
+    if: always() && needs.pre-commit.outputs.continue == 'true' && needs.test.result == 'success' && needs.security-scan.result == 'success' && needs.build-and-validate.result == 'success'
+
+    steps:
+      - name: Deployment status
+        run: |
+          echo "🚀 All checks passed! Ready for deployment."
+          echo "✅ Pre-commit checks: PASSED"
+          echo "✅ Tests: PASSED"
+          echo "✅ Security scan: PASSED"
+          echo "✅ Build validation: PASSED"

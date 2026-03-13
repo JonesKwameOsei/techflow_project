@@ -1,0 +1,25 @@
+# Global reviewers - require approval for all changes
+
+* @JonesKwames
+
+## GitHub workflows and CI/CD configurations
+
+/.github/ @JonesKwames
+/.pre-commit-config.yaml @JonesKwames
+/CI-CD-SETUP.md @JonesKwames
+
+## Python application code
+
+*.py @JonesKwames
+/requirements.txt @JonesKwames
+/test_*.py @JonesKwames
+
+## Documentation
+
+*.md @JonesKwames
+
+## Configuration files
+
+*.yml @JonesKwames
+*.yaml @JonesKwames
+*.json @JonesKwames
