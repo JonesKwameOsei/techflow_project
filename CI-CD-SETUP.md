@@ -24,7 +24,7 @@ This repository implements a comprehensive CI/CD pipeline with `pre-commit hooks
 
 ## Setting Up Branch Protection
 
-Steps to setup branch protection:
+Steps to set up branch protection:
 
 ### 1. Push Your Changes
 
