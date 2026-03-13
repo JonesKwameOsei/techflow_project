@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository implements a comprehensive CI/CD pipeline with pre-commit hooks and branch protection to ensure code quality and security.
+This repository implements a comprehensive CI/CD pipeline with `pre-commit hooks` and `branch protection` to ensure **code quality** and **security**.
 
 ## CI/CD Pipeline
 
@@ -24,7 +24,7 @@ This repository implements a comprehensive CI/CD pipeline with pre-commit hooks 
 
 ## Setting Up Branch Protection
 
-Since GitHub's branch protection requires the repository to be properly configured, follow these steps:
+Steps to setup branch protection:
 
 ### 1. Push Your Changes
 
@@ -78,7 +78,7 @@ Go to your repository on GitHub:
 - ✅ **Require deployments to succeed** - If you have deployment environments
 - ✅ **Lock branch** - For extra protection (makes branch read-only)
 
-> **⚠️ Important**: The required status checks will only appear in the dropdown **after** you've pushed your code and the GitHub Actions workflows have run at least once. If you don't see the status checks listed, push your changes first, then return to configure the ruleset.
+> **⚠️ Important**: The required status checks will only appear in the dropdown **after** the code is pushed and the GitHub Actions workflows have run at least once. If the status checks listed, push the changes first, then return to configure the ruleset.
 
 1. Click **Create** to save the ruleset
 
