@@ -269,3 +269,45 @@ All checks have passed successfully. The code is now ready to be pushed to the r
 ![alt text](images/pr.png)
 
 ---
+
+## 🐋 Phase 2: Docker & Deployment
+
+The foundation is now set for the next phase of full automation:
+
+### 1. Creation of Dockerfile
+
+Next, we need to create a `Dockerfile` to containerize the Flask app. This will allow us to run the app in any environment without worrying about dependencies or configuration issues.
+
+Creating the `Dockerfile` from scratch, it should`:
+
+**Containerize** the Flask app. The `Docker image` must:
+
+- Be based on an official Python image
+- Install all dependencies from `requirements.txt`
+- Create a `non-root user` to run the app for security
+- Expose port `5000`
+- Start the app when the container runs
+
+Test it locally before moving on:
+
+```bash
+docker build -t techflow-app .
+docker run --name techflow-app -p 5000:5000 techflow-app
+# Visit http://localhost:5000 — does it work?
+```
+
+Docker image built and container runs successfully. The app is accessible at `http://localhost:5000` and all endpoints work as expected.
+
+Access it via the CLI to see the running container:
+
+```sh
+❯ docker ps
+CONTAINER ID   IMAGE                 COMMAND           CREATED         STATUS         PORTS                                         NAMES
+2f4428f0e610   techflow-app:latest   "python app.py"   3 minutes ago   Up 3 minutes   0.0.0.0:5000->5000/tcp, [::]:5000->5000/tcp   techflow-app
+```
+
+Access it via the browser to see the app running: `http://localhost:5000`
+
+![alt text](images/docker-run-local.png)
+
+![alt text](images/docker-container.png)
