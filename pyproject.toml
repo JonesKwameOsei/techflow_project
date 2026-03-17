@@ -22,7 +22,7 @@ ignore = [
 
 # mypy configuration
 [tool.mypy]
-python_version = "3.12"
+python_version = "3.9"
 strict = true
 exclude = [".venv/"]
 ignore_missing_imports = false
