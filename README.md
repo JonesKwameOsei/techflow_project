@@ -123,7 +123,7 @@ Having understood how the app works and what the tests do, we can start building
 
 - **Precommit Hooks**: Implement precommit hooks to run tests locally before allowing a commit. This ensures that broken code never even reaches the pipeline.
 - **Linting and Formatting**: `Ruff` would be used for linting and formatting to ensure code quality and consistency across the codebase. Set up is found in `pyproject.toml` and enforced via `pre-commit hooks`.
-- **Type Checking**: `mypy` will be used for static type checking to catch type errors before runtime.
+- **Type Checking**: `Pyright` will be used for static type checking to catch type errors before runtime.
 - **Secrets Management**: All sensitive information (e.g., DockerHub credentials, EC2 SSH keys, email credentials) will be stored securely using GitHub Secrets. No secrets should be hardcoded in any files.
 - **Disable root login**: Ensure that root login is disabled on the EC2 instance to prevent unauthorized access.
 - **No Root access for user in Docker Container**: The Dockerfile will be configured to run the application as a non-root user to minimize security risks.

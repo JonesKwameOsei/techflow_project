@@ -1,5 +1,6 @@
 [tool.ruff]
-target-version = "py312"
+# Match Ruff's target version to the minimum supported Python version in CI (3.9–3.13)
+target-version = "py39"
 
 [tool.ruff.lint]
 select = [
@@ -21,7 +22,7 @@ ignore = [
 
 # mypy configuration
 [tool.mypy]
-python_version = "3.12"
+python_version = "3.9"
 strict = true
 exclude = [".venv/"]
 ignore_missing_imports = false
