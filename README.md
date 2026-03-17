@@ -408,12 +408,25 @@ The workflow should include:
 - Runs `pytest test_app.py -v`
 - The next job must NOT run if tests fail
 
-#### **Job 2 — Build & Push**
+Test job is already implemented in the existing workflow. It runs on every push to `main` and ensures that all tests pass before proceeding to the next steps. All tests including linting, formatting, security scanning, and code coverage must pass successfully for the pipeline to continue to the Docker build and deployment stages.
+
+All tests passed in the workflows as expected:
+
+![CI-test1](images/test1.png)
+![CI-test2](images/test2.png)
+
+#### **Job 2 — Build & Push Docker Image**
+
+This job:
 
 - Only runs if Job 1 passes
-- Logs into DockerHub using secrets (see Secrets section below)
+- Logs into DockerHub using secrets
 - Builds the Docker image
 - Pushes it to DockerHub tagged as both `latest` and the commit SHA
+
+> Before this job can be implemented, you need to set up the following secrets in your GitHub repository:
+> - `DOCKERHUB_USERNAME`: DockerHub username
+> - `DOCKERHUB_PASSWORD`: DockerHub password or access token
 
 #### **Job 3 — Deploy**
 
