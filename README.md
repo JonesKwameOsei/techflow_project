@@ -204,7 +204,7 @@ mypy .
 
 **OutPUT**:
 
-```plaintext
+```sh
 Success: no issues found in 3 source files
 ```
 
