@@ -5,7 +5,9 @@ repos:
       - id: check-yaml
         exclude: ^.github/workflows/
       - id: end-of-file-fixer
+        exclude: ^images/
       - id: trailing-whitespace
+        exclude: ^images/
       - id: check-merge-conflict
       - id: check-added-large-files
         args: ['--maxkb=500']

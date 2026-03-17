@@ -122,6 +122,8 @@ Having understood how the app works and what the tests do, we can start building
 ### Security Implementation
 
 - **Precommit Hooks**: Implement precommit hooks to run tests locally before allowing a commit. This ensures that broken code never even reaches the pipeline.
+- **Linting and Formatting**: `Ruff` would be used for linting and formatting to ensure code quality and consistency across the codebase. Set up is found in `pyproject.toml` and enforced via `pre-commit hooks`.
+- **Type Checking**: `Pyright` will be used for static type checking to catch type errors before runtime.
 - **Secrets Management**: All sensitive information (e.g., DockerHub credentials, EC2 SSH keys, email credentials) will be stored securely using GitHub Secrets. No secrets should be hardcoded in any files.
 - **Disable root login**: Ensure that root login is disabled on the EC2 instance to prevent unauthorized access.
 - **No Root access for user in Docker Container**: The Dockerfile will be configured to run the application as a non-root user to minimize security risks.
@@ -170,6 +172,34 @@ These files that failed were well formatted after and subsequently passed.
 
 ```sh
 pre-commit install --hook-type pre-push
+```
+
+---
+
+### Using Ruff for Linting and Formatting
+
+```python
+# Install Ruff
+pip install ruff
+
+# Check for errors
+ruff check .
+
+# Automatically fix fixable errors
+ruff check --fix .
+
+# Format code
+ruff format .
+```
+
+## pyright for Type Checking
+
+```python
+# Install pyright
+pip install pyright
+
+# Run pyright
+pyright
 ```
 
 ---
@@ -311,3 +341,78 @@ Access it via the browser to see the app running: `http://localhost:5000`
 ![alt text](images/docker-run-local.png)
 
 ![alt text](images/docker-container.png)
+
+---
+
+#### Manually pushing the Docker image to DockerHub
+
+It is essential to push the Docker image to a registry (DockerHub) so it can be accessed and deployed from anywhere or even test the image locally. To do this, we need to:
+
+```bash
+docker login
+docker tag techflow-app:latest MY_DOCKERHUB_USERNAME/techflow-app:v1.0.0
+docker push MY_DOCKERHUB_USERNAME/techflow-app:v1.0.0
+```
+
+Verify that the image is successfully pushed to DockerHub by visiting your DockerHub repository.
+
+![alt text](images/dockerhub-image.png)
+
+Now the Docker image is available in DockerHub and can be pulled from anywhere for deployment.
+
+```sh
+docker pull MY_DOCKERHUB_USERNAME/techflow-app:v1.0.0
+```
+
+```sh
+➜ docker images
+
+IMAGE                                    ID             DISK USAGE   CONTENT SIZE   EXTRA
+kwameds/techflow-app:v1.0.0              d9ab821e3283        641MB          157MB    U
+techflow-app:latest                      d9ab821e3283        641MB          157MB    U
+```
+
+Again, the image is successfully pulled from DockerHub and is available locally. This confirms that the DockerHub integration is working correctly and the image can be accessed for deployment. Let's test the pulled image locally to ensure it runs as expected:
+
+```bash
+docker run --name techflow-app -p 5000:5000 kwameds/techflow-app:v1.0.0
+```
+
+Confirm container is running via CLI:
+
+```sh
+docker ps
+```
+
+Confirm that the app is running by visiting `http://localhost:5000` in the browser. The app should be accessible and functioning correctly, confirming that the Docker image works as intended.
+
+![alt text](images/dockerhub-container-running.png)
+
+### 2. `.github/workflows/pipeline.yml`
+
+Next, we need to update our GitHub Actions workflow to include steps for building the Docker image and pushing it to DockerHub. This will automate the process of creating and distributing our Docker image every time code is pushed to `main`.
+
+The workflow should include:
+
+#### **Job 1 — Test**
+
+- Triggers on every push to `main`
+- Spins up a Python environment
+- Installs dependencies
+- Runs `pytest test_app.py -v`
+- The next job must NOT run if tests fail
+
+#### **Job 2 — Build & Push**
+
+- Only runs if Job 1 passes
+- Logs into DockerHub using secrets (see Secrets section below)
+- Builds the Docker image
+- Pushes it to DockerHub tagged as both `latest` and the commit SHA
+
+#### **Job 3 — Deploy**
+
+- Only runs if Job 2 passes
+- SSHs into your EC2 server using a stored private key
+- Pulls the latest image
+- Stops the old container and starts the new one
+- Sends a success or failure email notification
