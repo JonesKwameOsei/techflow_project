@@ -15,7 +15,6 @@ Example:
 
 import argparse
 import sys
-from typing import List, Tuple
 
 try:
     from github import Github
@@ -25,7 +24,7 @@ except ImportError:
     sys.exit(1)
 
 # Define labels: (name, color, description)
-LABELS: List[Tuple[str, str, str]] = [
+LABELS: list[tuple[str, str, str]] = [
     # Type labels
     ("type:bug", "d73a4a", "Something isn't working"),
     ("type:feature", "a2eeef", "New feature or request"),
@@ -108,7 +107,7 @@ def create_labels(token: str, repo_name: str) -> None:
         sys.exit(1)
 
 
-def main():
+def main() -> None:
     """Main entry point."""
     parser = argparse.ArgumentParser(
         description="Create GitHub repository labels for TechFlow project"

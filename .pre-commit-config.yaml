@@ -5,7 +5,9 @@ repos:
       - id: check-yaml
         exclude: ^.github/workflows/
       - id: end-of-file-fixer
+        exclude: ^images/
       - id: trailing-whitespace
+        exclude: ^images/
       - id: check-merge-conflict
       - id: check-added-large-files
         args: ['--maxkb=500']
@@ -49,8 +51,9 @@ repos:
     rev: v1.11.2
     hooks:
       - id: mypy
-        additional_dependencies: [types-requests, types-flask]
-        exclude: ^test_
+        additional_dependencies: [types-requests, types-flask, types-setuptools]
+        args: [--strict, --show-error-codes]
+        exclude: ^test_.*\.py$
 
   - repo: https://github.com/commitizen-tools/commitizen
     rev: v3.29.0

@@ -1,0 +1,6 @@
+def main() -> None:
+    data: dict[str, int] = {"key": 1}
+    print(data)
+
+if __name__ == "__main__":
+    main()

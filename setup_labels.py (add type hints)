@@ -1,0 +1,20 @@
+pyproject.toml:
+[tool.mypy]
+files = ["setup_labels.py", "app.py"]
+
+setup_labels.py:
+from github import Github, GithubException
+
+def setup_labels(repo: Github) -> None:
+    try:
+        # Your logic here
+        pass
+    except GithubException as e:
+        print(f"An error occurred: {e}")
+
+app.py:
+from typing import Dict
+
+def process_data(data: Dict[str, int]) -> None:
+    # Your logic here
+    pass
