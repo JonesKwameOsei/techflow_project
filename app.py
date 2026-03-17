@@ -6,12 +6,12 @@ app = Flask(__name__)
 
 
 @app.route("/")
-def hello():
+def hello() -> tuple[str, int]:
     return "Hello, World! 🚀 TechFlow CI/CD Pipeline is live.", 200
 
 
 @app.route("/health")
-def health():
+def health() -> tuple[dict[str, str], int]:
     return {"status": "ok"}, 200
 
 

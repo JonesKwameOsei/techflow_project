@@ -28,7 +28,62 @@ ignore_missing_imports = false
 show_error_codes = true
 warn_unused_configs = true
 disallow_untyped_defs = true
+disallow_incomplete_defs = true
+disallow_untyped_calls = true
 disallow_any_generics = true
 no_implicit_optional = true
 warn_redundant_casts = true
 warn_unused_ignores = true
+warn_return_any = true
+check_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = ["github", "github.*"]
+ignore_missing_imports = true
+
+# commitizen configuration to match PR checks
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.1.0"
+tag_format = "v$version"
+version_files = ["pyproject.toml:version"]
+[tool.commitizen.customize]
+[tool.commitizen.customize.change_type_map]
+"breaking" = "BREAKING CHANGE"
+"feat" = "Feat"
+"fix" = "Fix"
+"refactor" = "Refactor"
+
+commit_parser = "^(?P<change_type>fix|feat|docs|style|refactor|test|chore|ci|build)(?:\\((?P<scope>[^()]*?)\\))?(?P<breaking>!)?:\\s(?P<message>.*)?"
+message_template = "{{change_type}}{{scope}}: {{message}}"
+example = "feat: add new feature"
+schema = "<type>(<scope>): <subject>"
+schema_pattern = "(fix|feat|docs|style|refactor|test|chore|ci|build)(\\(\\S+\\))?!?: .+"
+change_type_order = ["BREAKING CHANGE", "feat", "fix", "refactor", "perf"]
+changelog_pattern = "^(fix|feat|docs|style|refactor|test|chore|ci|build)(\\(.+\\))?(!)?:\\s(.+)"
+"perf" = "Perf"
+[[tool.commitizen.customize.questions]]
+type = "list"
+name = "change_type"
+message = "Select the type of change you are committing"
+choices = [
+    { value = "fix", name = "fix: A bug fix" },
+    { value = "feat", name = "feat: A new feature" },
+    { value = "docs", name = "docs: Documentation only changes" },
+    { value = "style", name = "style: Changes that do not affect the meaning of the code" },
+    { value = "refactor", name = "refactor: A code change that neither fixes a bug nor adds a feature" },
+    { value = "test", name = "test: Adding missing tests or correcting existing tests" },
+    { value = "chore", name = "chore: Changes to the build process or auxiliary tools" },
+    { value = "ci", name = "ci: Changes to our CI configuration files and scripts" },
+    { value = "build", name = "build: Changes that affect the build system or external dependencies" },
+]
+
+[[tool.commitizen.customize.questions]]
+type = "input"
+name = "scope"
+message = "What is the scope of this change? (class or file name): (press [enter] to skip)"
+
+[[tool.commitizen.customize.questions]]
+type = "input"
+name = "message"
+message = "Write a short and imperative summary of the code changes: (lower case and no period)"
