@@ -559,7 +559,7 @@ App deployed successfully!
 
 Application running on EC2 and accessible via the public IP address:
 
-![ec2 -ap](images/App-live-on-ec2-server.png)
+![ec2-app](images/App-live-on-ec2-server.png)
 ![alt text](images/app-access-cli.png)
 ![alt text](images/app-health-check.png)
 
