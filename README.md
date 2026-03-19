@@ -450,7 +450,7 @@ EC2 instance running and accessible via SSH.
 ![EC2 Server](images/techflow-app-server.png)
 ![alt text](images/ssh-into-ec2.png)
 
-Test docker download and run on EC2:
+Test Docker download and run on EC2:
 
 ```bash
 docker --version
