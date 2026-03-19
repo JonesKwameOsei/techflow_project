@@ -548,3 +548,22 @@ Since the pipeline must never contain passwords or keys in plain text, storing a
 | `NOTIFY_EMAIL` | The email address to receive notifications |
 
 ---
+
+## Conclusion
+
+Application is now fully containerized with a `Shift left` CI/CD pipeline that ensures code quality, security, and reliability at every step. The deployment is also fully automated with health checks and automatic rollbacks, providing a robust and resilient infrastructure for continuous delivery. Email notifications keep the team informed of deployment status, and all secrets are securely managed with GitHub Secrets.
+
+App Deployed with Success!
+
+![alt text](images/ec2-deployment-complete1.png)
+![alt text](images/ec2-deployment-complete.png)
+
+Application running on EC2 and accessible via the public IP address:
+
+![ec2 -ap](images/App-live-on-ec2-server.png)
+![alt text](images/app-access-cli.png)
+![alt text](images/app-health-check.png)
+
+Email notification received confirming successful deployment:
+
+![email-notification](images/email-notifications.png)
