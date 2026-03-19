@@ -3,11 +3,22 @@
 # Rollback script for TechFlow application
 # Reverts to previous stable version if deployment fails
 
-DOCKER_IMAGE="${DOCKERHUB_USERNAME}/techflow-app"
-CONTAINER_NAME="techflow-app"
+# Check for required environment variables
+if [ -z "${DOCKERHUB_USERNAME}" ]; then
+    echo "❌ Error: DOCKERHUB_USERNAME environment variable is not set"
+    echo "   Please ensure DOCKERHUB_USERNAME is passed from the workflow"
+    exit 1
+fi
+
+# Use dynamic image name based on repository
+REPO_NAME="${REPO_NAME:-techflow_project}"
+DOCKER_IMAGE="${DOCKERHUB_USERNAME}/${REPO_NAME}"
+CONTAINER_NAME="${CONTAINER_NAME:-techflow-app}"
 PREVIOUS_STABLE_TAG="previous_stable"
 
 echo "🔄 Starting rollback process..."
+echo "📦 Docker image: $DOCKER_IMAGE"
+echo "🏷️ Container name: $CONTAINER_NAME"
 
 # Stop and remove the broken container
 echo "⛔ Stopping and removing broken container..."

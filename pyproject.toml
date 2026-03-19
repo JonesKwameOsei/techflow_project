@@ -45,16 +45,11 @@ commit_parser = "^(?P<change_type>fix|feat|docs|style|refactor|test|chore|ci|bui
 changelog_pattern = "^(fix|feat|docs|style|refactor|test|chore|ci|build)(\\\\(.+\\\\))?(!)?:\\\\s(.+)"
 
 [tool.commitizen.customize.change_type_map]
-"breaking" = "BREAKING CHANGE"
-"feat" = "Feat"
 "fix" = "Fix"
 "refactor" = "Refactor"
 "perf" = "Perf"
-schema = "<type>(<scope>): <subject>"
-schema_pattern = "(fix|feat|docs|style|refactor|test|chore|ci|build)(\\(\\S+\\))?!?: .+"
-change_type_order = ["BREAKING CHANGE", "feat", "fix", "refactor", "perf"]
-changelog_pattern = "^(fix|feat|docs|style|refactor|test|chore|ci|build)(\\(.+\\))?(!)?:\\s(.+)"
-# "perf" = "Perf"
+"breaking" = "BREAKING CHANGE"
+"feat" = "Feat"
 [[tool.commitizen.customize.questions]]
 type = "list"
 name = "change_type"
@@ -69,6 +64,7 @@ choices = [
     { value = "chore", name = "chore: Changes to the build process or auxiliary tools" },
     { value = "ci", name = "ci: Changes to our CI configuration files and scripts" },
     { value = "build", name = "build: Changes that affect the build system or external dependencies" },
+    { value = "deploy", name = "deploy: Changes related to deployment" },
 ]
 
 [[tool.commitizen.customize.questions]]

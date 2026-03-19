@@ -190,8 +190,8 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/techflow-app:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/techflow-app:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -209,16 +209,35 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          REPO_NAME: ${{ github.event.repository.name }}
+          CONTAINER_NAME: techflow-app
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           port: ${{ secrets.EC2_SSH_PORT }}
-          envs: DOCKERHUB_USERNAME
+          envs: DOCKERHUB_USERNAME,REPO_NAME,CONTAINER_NAME
           script: |
             cd /home/ubuntu
+
+            # Update scripts from repository
+            echo "📥 Updating deployment scripts..."
+            if [ -d "techflow_project" ]; then
+              cd techflow_project
+              git pull origin main
+              cd ..
+            else
+              git clone https://github.com/JonesKwameOsei/techflow_project.git
+            fi
+
+            # Copy latest scripts and make executable
+            cp techflow_project/scripts/*.sh /home/ubuntu/
             chmod +x *.sh
+            echo "✅ Scripts updated successfully"
+
             echo "🚀 Starting deployment of TechFlow app..."
+            echo "📦 Repository: $REPO_NAME"
+            echo "🐳 Docker image: ${DOCKERHUB_USERNAME}/${REPO_NAME}"
             if ./deploy.sh; then
               echo "✅ Deployment successful!"
               exit 0

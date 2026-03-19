@@ -5,10 +5,28 @@
 
 set -e  # Exit on any error
 
-DOCKER_IMAGE="${DOCKERHUB_USERNAME}/techflow-app"
-CONTAINER_NAME="techflow-app"
+# Check for required environment variables
+if [ -z "${DOCKERHUB_USERNAME}" ]; then
+    echo "❌ Error: DOCKERHUB_USERNAME environment variable is not set"
+    echo "   Please ensure DOCKERHUB_USERNAME is passed from the workflow"
+    exit 1
+fi
+
+# Use dynamic image name based on repository
+REPO_NAME="${REPO_NAME:-techflow_project}"
+DOCKER_IMAGE="${DOCKERHUB_USERNAME}/${REPO_NAME}"
+CONTAINER_NAME="${CONTAINER_NAME:-techflow-app}"
 
 echo "🚀 Starting TechFlow deployment..."
+echo "📦 Docker image: $DOCKER_IMAGE"
+echo "🏷️ Container name: $CONTAINER_NAME"
+
+# Ensure we're logged into Docker (for private repos or rate limits)
+echo "🔐 Ensuring Docker login..."
+if ! docker info >/dev/null 2>&1; then
+    echo "❌ Docker daemon not accessible"
+    exit 1
+fi
 
 # Step 1: Tag current stable version (for rollback capability)
 echo "📋 Step 1: Tagging current stable version..."

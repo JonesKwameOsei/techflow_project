@@ -3,10 +3,21 @@
 # Tag current stable image as previous_stable before new deployment
 # This enables rollback functionality
 
-DOCKER_IMAGE="${DOCKERHUB_USERNAME}/techflow-app"
-CONTAINER_NAME="techflow-app"
+# Check for required environment variables
+if [ -z "${DOCKERHUB_USERNAME}" ]; then
+    echo "❌ Error: DOCKERHUB_USERNAME environment variable is not set"
+    echo "   Please ensure DOCKERHUB_USERNAME is passed from the workflow"
+    exit 1
+fi
+
+# Use dynamic image name based on repository
+REPO_NAME="${REPO_NAME:-techflow_project}"
+DOCKER_IMAGE="${DOCKERHUB_USERNAME}/${REPO_NAME}"
+CONTAINER_NAME="${CONTAINER_NAME:-techflow-app}"
 
 echo "🏷️ Tagging current stable image as previous_stable..."
+echo "📦 Docker image: $DOCKER_IMAGE"
+echo "🏷️ Container name: $CONTAINER_NAME"
 
 # Check if container is running
 if sudo docker ps --format "table {{.Names}}" | grep -q "^${CONTAINER_NAME}$"; then
