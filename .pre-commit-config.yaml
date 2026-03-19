@@ -47,11 +47,12 @@ repos:
         args: ['-f', 'screen']
         exclude: ^test_
 
-  - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.390
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.11.2
     hooks:
-      - id: pyright
-        additional_dependencies: [types-requests, types-flask]
+      - id: mypy
+        additional_dependencies: [types-requests, types-flask, PyGithub]
+        args: [--strict, --show-error-codes]
         exclude: ^test_.*\.py$
 
   - repo: https://github.com/commitizen-tools/commitizen

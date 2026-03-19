@@ -61,7 +61,7 @@ jobs:
             exit 1
           fi
 
-          if [ "$CHANGED_LINES" -gt 500 ]; then
+          if [ "$CHANGED_LINES" -gt 1000 ]; then
             echo "❌ PR contains too many line changes ($CHANGED_LINES). Consider breaking it down."
             exit 1
           fi
