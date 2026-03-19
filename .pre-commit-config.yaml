@@ -51,7 +51,7 @@ repos:
     rev: v1.11.2
     hooks:
       - id: mypy
-        additional_dependencies: [types-requests, types-flask, types-setuptools]
+        additional_dependencies: [types-requests, types-flask, PyGithub]
         args: [--strict, --show-error-codes]
         exclude: ^test_.*\.py$
 

@@ -425,8 +425,15 @@ This job:
 - Pushes it to DockerHub tagged as both `latest` and the commit SHA
 
 > Before this job can be implemented, you need to set up the following secrets in your GitHub repository:
+>
 > - `DOCKERHUB_USERNAME`: DockerHub username
 > - `DOCKERHUB_PASSWORD`: DockerHub password or access token
+
+Image built and pushed to DockerHub successfully in the workflow:
+
+![build](images/build_n_push.png)
+
+![build image](images/build_n_push2.png)
 
 #### **Job 3 — Deploy**
 
@@ -435,3 +442,109 @@ This job:
 - Pulls the latest image
 - Stops the old container and starts the new one
 - Sends a success or failure email notification
+
+> 💡 **Hint:** Look into `appleboy/ssh-action` for SSH deployment and `dawidd6/action-send-mail` for email — these are community GitHub Actions that do the heavy lifting for you.
+
+EC2 instance running and accessible via SSH.
+
+![EC2 Server](images/techflow-app-server.png)
+![alt text](images/ssh-into-ec2.png)
+
+Test Docker download and run on EC2:
+
+```bash
+docker --version
+```
+
+Output confirms Docker is installed and working on the EC2 instance:
+
+```sh
+Docker version 28.2.2, build 28.2.2-0ubuntu1~24.04.1
+```
+
+Uploaded deployment script to EC2 and made it executable:
+
+![copy-scripts](images/copy-file-from-local-cloud-instance.png)
+
+Confirmed the script is present and executable on EC2:
+
+```bash
+ls -l
+```
+
+output:
+
+```sh
+total 16
+-rwxr-xr-x 1 ubuntu ubuntu 2042 Mar 19 03:04 deploy.sh
+-rwxr-xr-x 1 ubuntu ubuntu  902 Mar 19 03:04 health_check.sh
+-rwxr-xr-x 1 ubuntu ubuntu 1408 Mar 19 03:04 rollback.sh
+-rwxr-xr-x 1 ubuntu ubuntu 1752 Mar 19 03:04 tag_stable.sh
+```
+
+All scripts must be executable to avoid permission errors during deployment.
+
+```sh
+chmod +x /home/ubuntu/*.sh
+```
+
+---
+
+### Functions of Scripts
+
+#### 3. `scripts/health_check.sh`
+
+A bash script that runs on the EC2 server after deployment to verify the app is alive.
+
+Script:
+
+- Makes an HTTP request to the app's `/health` endpoint
+- Retries up to 5 times if it fails (the container needs a moment to start)
+- Exits with code `0` if the app is healthy
+- Exits with code `1` if all retries fail
+
+> 💡 Uses the `curl` command with the `-o` and `-w` flags to get just the HTTP status code.
+
+---
+
+#### 4. `scripts/rollback.sh`
+
+A bash script that runs on EC2 **only if the health check fails**.
+
+Script:
+
+- Stops and removes the broken container
+- Pulls the previous stable image from DockerHub (tagged `previous_stable`)
+- Starts that image instead
+- Verifies the rollback worked
+
+---
+
+#### 5. `scripts/tag_stable.sh` *(Stretch Goal)*
+
+A bash script that runs on EC2 **before** each new deployment.
+
+Script:
+
+- Finds the currently running container's image
+- Tags it as `previous_stable` on DockerHub
+
+This is what makes rollback possible. Without it, there's nothing to roll back to.
+
+---
+
+## 🔐 Full GitHub Secrets
+
+Since the pipeline must never contain passwords or keys in plain text, storing all sensitive values in **GitHub Secrets** (`Settings → Secrets and variables → Actions`) is essential.
+
+| Secret Name | What It Is |
+|-------------|-----------|
+| `DOCKERHUB_USERNAME` | Your DockerHub username |
+| `DOCKERHUB_TOKEN` | A DockerHub access token (not your password) |
+| `EC2_HOST` | The public IP address of your EC2 instance |
+| `EC2_SSH_KEY` | The full contents of your `.pem` private key file |
+| `EMAIL_USERNAME` | Your Gmail address |
+| `EMAIL_APP_PASSWORD` | A Gmail App Password (not your Gmail password) |
+| `NOTIFY_EMAIL` | The email address to receive notifications |
+
+---

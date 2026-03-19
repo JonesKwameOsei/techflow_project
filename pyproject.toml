@@ -22,7 +22,7 @@ ignore = [
 
 # mypy configuration
 [tool.mypy]
-python_version = "3.9"
+python_version = "3.12"
 strict = true
 exclude = [".venv/"]
 ignore_missing_imports = false
@@ -38,6 +38,7 @@ warn_unused_ignores = true
 warn_return_any = true
 check_untyped_defs = true
 
+# GitHub library overrides (for setup_labels.py)
 [[tool.mypy.overrides]]
 module = ["github", "github.*"]
 ignore_missing_imports = true
@@ -48,20 +49,21 @@ name = "cz_conventional_commits"
 version = "0.1.0"
 tag_format = "v$version"
 version_files = ["pyproject.toml:version"]
+
 [tool.commitizen.customize]
+message_template = "{{change_type}}{{scope}}: {{message}}"
+example = "feat: add new feature"
+schema = "<type>(<scope>): <subject>"
+schema_pattern = "(fix|feat|docs|style|refactor|test|chore|ci|build)(\\\\(\\\\S+\\\\))?!?: .+"
+change_type_order = ["BREAKING CHANGE", "feat", "fix", "refactor", "perf"]
+commit_parser = "^(?P<change_type>fix|feat|docs|style|refactor|test|chore|ci|build)(?:\\\\((?P<scope>[^()\\\\r\\\\n]*)\\\\))?(?P<breaking>!)?:\\\\s(?P<message>.*)?"
+changelog_pattern = "^(fix|feat|docs|style|refactor|test|chore|ci|build)(\\\\(.+\\\\))?(!)?:\\\\s(.+)"
+
 [tool.commitizen.customize.change_type_map]
 "breaking" = "BREAKING CHANGE"
 "feat" = "Feat"
 "fix" = "Fix"
 "refactor" = "Refactor"
-
-commit_parser = "^(?P<change_type>fix|feat|docs|style|refactor|test|chore|ci|build)(?:\\((?P<scope>[^()]*?)\\))?(?P<breaking>!)?:\\s(?P<message>.*)?"
-message_template = "{{change_type}}{{scope}}: {{message}}"
-example = "feat: add new feature"
-schema = "<type>(<scope>): <subject>"
-schema_pattern = "(fix|feat|docs|style|refactor|test|chore|ci|build)(\\(\\S+\\))?!?: .+"
-change_type_order = ["BREAKING CHANGE", "feat", "fix", "refactor", "perf"]
-changelog_pattern = "^(fix|feat|docs|style|refactor|test|chore|ci|build)(\\(.+\\))?(!)?:\\s(.+)"
 "perf" = "Perf"
 [[tool.commitizen.customize.questions]]
 type = "list"
@@ -77,6 +79,7 @@ choices = [
     { value = "chore", name = "chore: Changes to the build process or auxiliary tools" },
     { value = "ci", name = "ci: Changes to our CI configuration files and scripts" },
     { value = "build", name = "build: Changes that affect the build system or external dependencies" },
+    { value = "deploy", name = "deploy: Changes related to deployment" },
 ]
 
 [[tool.commitizen.customize.questions]]
