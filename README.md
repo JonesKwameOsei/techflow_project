@@ -552,7 +552,7 @@ Since the pipeline must never contain passwords or keys in plain text, storing a
 ## Conclusion
 
 
-App Deployed with Success!
+App deployed successfully!
 
 ![alt text](images/ec2-deployment-complete1.png)
 ![alt text](images/ec2-deployment-complete.png)
