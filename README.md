@@ -551,7 +551,6 @@ Since the pipeline must never contain passwords or keys in plain text, storing a
 
 ## Conclusion
 
-Application is now fully containerized with a `Shift left` CI/CD pipeline that ensures code quality, security, and reliability at every step. The deployment is also fully automated with health checks and automatic rollbacks, providing a robust and resilient infrastructure for continuous delivery. Email notifications keep the team informed of deployment status, and all secrets are securely managed with GitHub Secrets.
 
 App Deployed with Success!
 
