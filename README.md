@@ -548,3 +548,21 @@ Since the pipeline must never contain passwords or keys in plain text, storing a
 | `NOTIFY_EMAIL` | The email address to receive notifications |
 
 ---
+
+## Conclusion
+
+
+App deployed successfully!
+
+![alt text](images/ec2-deployment-complete1.png)
+![alt text](images/ec2-deployment-complete.png)
+
+Application running on EC2 and accessible via the public IP address:
+
+![ec2-app](images/App-live-on-ec2-server.png)
+![alt text](images/app-access-cli.png)
+![alt text](images/app-health-check.png)
+
+`Email` notification received confirming successful deployment:
+
+![email-notification](images/email-notifications.png)
