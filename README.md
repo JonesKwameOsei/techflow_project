@@ -564,6 +564,6 @@ Application running on EC2 and accessible via the public IP address:
 ![alt text](images/app-access-cli.png)
 ![alt text](images/app-health-check.png)
 
-Email notification received confirming successful deployment:
+`Email` notification received confirming successful deployment:
 
 ![email-notification](images/email-notifications.png)
