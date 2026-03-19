@@ -209,6 +209,7 @@ jobs:
       - name: Deploy to EC2 via SSH
         uses: appleboy/ssh-action@v1.0.3
         env:
+          # Use environment variables to pass secrets to the SSH session
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           REPO_NAME: ${{ github.event.repository.name }}
           CONTAINER_NAME: techflow-app
