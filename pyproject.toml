@@ -20,7 +20,7 @@ ignore = [
     "B904", # Allow raising exceptions without from e, for HTTPException
 ]
 
-# mypy configuration
+# MYPY configuration
 [tool.mypy]
 python_version = "3.12"
 strict = true
